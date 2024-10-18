@@ -5,9 +5,9 @@ import grammar_normal_converter as grammar_converter
 
 class Node:
     """
-    Represents a non-terminal symbol in CNF.
-    Can have up to two children (Node or string).
-    Handles multiple parses via alternative children.
+    Representa un símbolo no terminal en FNC.
+    Puede tener hasta dos hijos (Node o string).
+    Maneja múltiples análisis mediante hijos alternativos.
     """
 
     def __init__(self, symbol, child1, child2=None):
@@ -16,20 +16,20 @@ class Node:
         self.child2 = child2
 
     def __repr__(self):
-        """Returns string representation of the Node."""
+        """Retorna representación en string del Node."""
         return self.symbol
 
 
 class Parser:
     """
-    CYK parser for CNF grammars.
-    Accepts grammar from file or string.
-    Outputs parse tree(s) as string or to console.
+    Parser CYK para gramáticas en FNC.
+    Acepta gramática desde archivo o string.
+    Muestra árbol(es) de análisis como string o en consola.
     """
 
     def __init__(self, grammar, sentence):
         """
-        Initializes parser, reads grammar, and prepares for parsing.
+        Inicializa el parser, lee la gramática y prepara para el análisis.
         """
         self.parse_table = None
         self.prods = {}
@@ -42,7 +42,7 @@ class Parser:
 
     def __call__(self, sentence, parse=False):
         """
-        Parses given sentence with stored grammar.
+        Analiza la oración dada con la gramática almacenada.
         """
         if os.path.isfile(sentence):
             with open(sentence) as inp:
@@ -54,7 +54,7 @@ class Parser:
 
     def grammar_from_file(self, grammar):
         """
-        Reads CFG from file, converts to CNF.
+        Lee GLC desde archivo, convierte a FNC.
         """
         with open(grammar) as cfg:
             lines = cfg.readlines()
@@ -62,21 +62,21 @@ class Parser:
 
     def grammar_from_string(self, grammar):
         """
-        Reads CFG from string, converts to CNF.
+        Lee GLC desde string, convierte a FNC.
         """
         self.grammar = self.convert_grammar([self.split_rule(x) for x in grammar.split('\n') if x.strip()])
 
     def split_rule(self, rule):
         """
-        Splits rule into LHS and RHS alternatives.
-        Handles '|' operator.
+        Divide regla en LHS y alternativas RHS.
+        Maneja operador '|'.
         """
         lhs, rhs = rule.replace("->", "").split(None, 1)
         return [lhs.strip()] + [x.strip() for x in rhs.split('|')]
 
     def convert_grammar(self, grammar):
         """
-        Converts grammar with '|' alternatives to CNF.
+        Convierte gramática con alternativas '|' a FNC.
         """
         result = []
         for rule in grammar:
@@ -87,8 +87,8 @@ class Parser:
 
     def parse(self):
         """
-        Implements CYK parsing algorithm.
-        Stores parse table in self.parse_table.
+        Implementa algoritmo de análisis CYK.
+        Almacena tabla de análisis en self.parse_table.
         """
         length = len(self.input)
         self.parse_table = [[[] for x in range(length - y)] for y in range(length)]
@@ -115,7 +115,7 @@ class Parser:
 
     def print_tree(self, output=True):
         """
-        Prints or returns parse tree(s) starting from the start symbol.
+        Imprime o retorna árbol(es) de análisis desde el símbolo inicial.
         """
         start_symbol = self.grammar[0][0]
         final_nodes = [n for n in self.parse_table[-1][0] if n.symbol == start_symbol]
@@ -135,7 +135,7 @@ class Parser:
 
 def generate_tree(node):
     """
-    Generates string representation of parse tree.
+    Genera representación en string del árbol de análisis.
     """
     if node.child2 is None:
         return f"[{node.symbol} '{node.child1}']"
@@ -145,9 +145,9 @@ def generate_tree(node):
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument("grammar",
-                           help="File containing the grammar or string directly representing the grammar.")
+                           help="Archivo con la gramática o string que representa directamente la gramática.")
     argparser.add_argument("sentence",
-                           help="File containing the sentence or string directly representing the sentence.")
+                           help="Archivo con la oración o string que representa directamente la oración.")
     args = argparser.parse_args()
     CYK = Parser(args.grammar, args.sentence)
     CYK.parse()
