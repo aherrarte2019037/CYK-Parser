@@ -13,20 +13,20 @@ class CYKParser:
         n = len(words)
         self.parse_table = [[[] for _ in range(n)] for _ in range(n)]
 
-        # Fill the base case of the table
+        # Lllena el caso base de la tabla
         for i, word in enumerate(words):
             for lhs, rhs in self.grammar:
                 if len(rhs) == 1 and rhs[0] == f"'{word}'":
                     self.parse_table[0][i].append(Node(lhs, word))
 
-        # Fill the table
+        # Llena el resto de la tabla
         for l in range(2, n + 1):
             for i in range(n - l + 1):
                 j = i + l - 1
                 for k in range(i, j):
                     self._check_cell(i, j, k)
 
-        # Check if the start symbol is in the top-left cell
+        # Comprueba si el símbolo inicial está en la celda superior izquierda
         return any(node.symbol == self.start_symbol for node in self.parse_table[n-1][0])
 
     def _check_cell(self, i: int, j: int, k: int):

@@ -24,7 +24,7 @@ class Grammar:
         unit_productions: List[Tuple[str, List[str]]] = []
         index = 0
 
-        # Step 1: Eliminate ε-productions and unit productions
+        # Paso 1: Eliminar ε-producciones
         for lhs, rhs_list in self.rules:
             new_rhs_list = []
             for rhs in rhs_list:
@@ -39,7 +39,7 @@ class Grammar:
                     rule_dict[lhs] = []
                 rule_dict[lhs].extend(new_rhs_list)
 
-        # Step 2: Eliminate unit productions
+        # Paso 2: Eliminar producciones unitarias
         while unit_productions:
             lhs, rhs = unit_productions.pop(0)
             if rhs[0] in rule_dict:
@@ -51,7 +51,7 @@ class Grammar:
                             rule_dict[lhs] = []
                         rule_dict[lhs].append(production)
 
-        # Step 3: Convert to CNF
+        # Paso 3: Convertir a CNF
         for lhs, rhs_list in rule_dict.items():
             for rhs in rhs_list:
                 if len(rhs) > 2:
