@@ -122,10 +122,12 @@ class Parser:
         if final_nodes:
             if output:
                 print("• SI")
-                print("• Parse Tree:")
+                print("• Árbol de análisis:")
             trees = [generate_tree(node) for node in final_nodes]
             if output:
-                for tree in trees:
+                for i, tree in enumerate(trees, 1):
+                    if len(trees) > 1:
+                        print(f"\nÁrbol {i}:")
                     print(tree)
             else:
                 return trees
@@ -133,13 +135,17 @@ class Parser:
             print("NO")
 
 
-def generate_tree(node):
+def generate_tree(node, level=0):
     """
-    Genera representación en string del árbol de análisis.
+    Genera representación en string del árbol de análisis con indentación.
     """
+    indent = "  " * level
     if node.child2 is None:
-        return f"[{node.symbol} '{node.child1}']"
-    return f"[{node.symbol} {generate_tree(node.child1)} {generate_tree(node.child2)}]"
+        return f"{indent}{node.symbol} → '{node.child1}'\n"
+    else:
+        return f"{indent}{node.symbol}\n" + \
+               generate_tree(node.child1, level + 1) + \
+               generate_tree(node.child2, level + 1)
 
 
 if __name__ == '__main__':
